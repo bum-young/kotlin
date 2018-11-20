@@ -5,8 +5,16 @@ import javax.persistence.*
 
 @Entity
 @Table(name="roles")
-class Role {
-    @Id
+data class Role(
+       @Id
+       @GeneratedValue(strategy = GenerationType.IDENTITY)
+       var id:Long? = null,
+       @Enumerated(EnumType.STRING)
+       @NaturalId
+       @Column(length = 60)
+       var name:RoleName? = null
+) {
+    /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id:Long? = null
 
@@ -22,5 +30,5 @@ class Role {
     constructor(id:Long, name:RoleName) {
         this.id = id
         this.name = name
-    }
+    }*/
 }

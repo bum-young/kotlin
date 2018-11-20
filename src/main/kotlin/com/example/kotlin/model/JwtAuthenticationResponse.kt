@@ -10,6 +10,4 @@ class JwtAuthenticationResponse {
     constructor(accessToken:String?) {
         this.accessToken = accessToken
     }
-
-
 }
