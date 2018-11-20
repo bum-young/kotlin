@@ -1,16 +1,13 @@
 package com.example.kotlin.model
 
-import lombok.Getter
-import lombok.Setter
-
-class UserSummary {
-    var id:Long? = null
+data class UserSummary(var id:Long?, var username:String?, var name:String?) {
+    /*var id:Long? = null
     var username:String? = null
-    var name:String? = null
+    var name:String? = null*/
 
-    constructor(id:Long?, username:String?, name:String?) {
+/*    constructor(id:Long?, username:String?, name:String?) {
         this.id = id
         this.username = username
         this.name = name
-    }
+    }*/
 }
