@@ -11,7 +11,7 @@ import java.util.*
 @Component
 class JwtTokenProvider {
 
-    val log = LoggerFactory.getLogger(this.javaClass)
+    var log = LoggerFactory.getLogger(this.javaClass)
 
     @Value("\${app.jwtSecret}")
     private val jwtSecret: String? = null
@@ -23,8 +23,7 @@ class JwtTokenProvider {
     fun generateToken(authentication: Authentication) : String {
         var userPrincipal:UserPrincipal = authentication.principal as UserPrincipal
 
-        var now:Date = Date()
-        var expiryDate:Date = Date(now.time + jwtExpirationInMs)
+        var expiryDate = Date(Date().time + jwtExpirationInMs)
 
         return Jwts.builder()
                 .setSubject(userPrincipal.id.toString())
@@ -35,12 +34,14 @@ class JwtTokenProvider {
     }
 
     fun getUserIdFormJWT(token:String?):Long {
-         var claims:Claims = Jwts.parser()
+         /*var claims:Claims = Jwts.parser()
                  .setSigningKey(jwtSecret)
                  .parseClaimsJws(token)
-                 .body
+                 .body*/
 
-        return claims.subject.toLong()
+        //return claims.subject.toLong()
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).body.subject.toLong()
+
     }
 
     fun validateToken(authToken:String?):Boolean {
