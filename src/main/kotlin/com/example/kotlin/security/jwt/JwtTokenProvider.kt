@@ -26,8 +26,6 @@ class JwtTokenProvider {
         var now:Date = Date()
         var expiryDate:Date = Date(now.time + jwtExpirationInMs)
 
-        log.info("-] generationToken : ${userPrincipal.id} ")
-
         return Jwts.builder()
                 .setSubject(userPrincipal.id.toString())
                 .setIssuedAt(Date())
@@ -47,7 +45,6 @@ class JwtTokenProvider {
 
     fun validateToken(authToken:String?):Boolean {
         try{
-            log.info("=] jwtSecret : ${authToken}")
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken)
             return true
         } catch (ex : SignatureException) {
