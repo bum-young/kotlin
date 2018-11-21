@@ -30,22 +30,13 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/auth")
-class AuthController {
-
-    @Autowired
-    var authenticationManager: AuthenticationManager? = null
-
-    @Autowired
-    var userRespository: UserRepository? = null
-
-    @Autowired
-    var roleRepository: RoleRepository? = null
-
-    @Autowired
-    var passwordEncoder: PasswordEncoder? = null
-
-    @Autowired
-    var tokenProvider : JwtTokenProvider? = null
+class AuthController(
+        private val authenticationManager:AuthenticationManager,
+        private val userRespository:UserRepository,
+        private val roleRepository: RoleRepository,
+        private val passwordEncoder: PasswordEncoder,
+        private val tokenProvider: JwtTokenProvider
+) {
 
     @PostMapping("/signin")
     fun authenticateUser(@Valid @RequestBody loginRequest:LoginRequest) : ResponseEntity<*> {

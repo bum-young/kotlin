@@ -14,14 +14,13 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api")
-class UserController {
+class UserController(
+        private val userRepository: UserRepository
+){
 
     val log = LoggerFactory.getLogger(this.javaClass)
 
-    @Autowired
-    private var userRepository:UserRepository? = null
-
-    @GetMapping("/user/me")
+     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
     fun getCurrentUser(@CurrentUser currentUser:UserPrincipal) : UserSummary {
         var userSummary:UserSummary = UserSummary(currentUser.id, currentUser.username, currentUser.name)
