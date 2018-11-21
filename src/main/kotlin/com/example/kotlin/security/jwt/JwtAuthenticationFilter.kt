@@ -31,7 +31,7 @@ class JwtAuthenticationFilter: OncePerRequestFilter() {
                 val userId:Long? = tokenProvider.getUserIdFormJWT(jwt)
 
                 val userDetails:UserDetails = customUserDetailsService!!.loadUserById(userId!!)
-                var authenticationToken:UsernamePasswordAuthenticationToken =
+                var authenticationToken =
                         UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
 
                 authenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
@@ -48,7 +48,7 @@ class JwtAuthenticationFilter: OncePerRequestFilter() {
     fun getJwtFromRequest(request:HttpServletRequest):String?{
         var bearerToken:String? = request.getHeader("Authorization")
         return if(StringUtils.hasText(bearerToken) && bearerToken!!.startsWith("Bearer ")){
-            return bearerToken?.substring(7, bearerToken.length)
+            return bearerToken.substring(7, bearerToken.length)
         } else null
     }
 }

@@ -23,15 +23,14 @@ class UserController(
      @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
     fun getCurrentUser(@CurrentUser currentUser:UserPrincipal) : UserSummary {
-        var userSummary:UserSummary = UserSummary(currentUser.id, currentUser.username, currentUser.name)
-        return userSummary
+        return UserSummary(currentUser.id, currentUser.username, currentUser.name)
     }
 
     @GetMapping("/users/{name}")
     fun usersName(@PathVariable name:String) : ResponseEntity<*> {
         log.info("=] name : ${name}")
 
-        val principal:UserPrincipal = UserPrincipal(
+        val principal = UserPrincipal(
                 "1".toLong(),
                 name,
                 "usernameValue",
@@ -45,12 +44,12 @@ class UserController(
 
     @GetMapping("/user/checkUsernameAvailability")
     fun checkUsernameAvailability(@RequestParam(value="username") username:String) : UserIdentityAvailability {
-        return UserIdentityAvailability(!userRepository!!.existsByUsername(username))
+        return UserIdentityAvailability(!userRepository.existsByUsername(username))
     }
 
     @GetMapping("/user/checkEmailAvailability")
     fun checkEmailAvailability(@RequestParam(value="email") email:String) : UserIdentityAvailability {
-        return UserIdentityAvailability(!userRepository!!.existsByEmail(email))
+        return UserIdentityAvailability(!userRepository.existsByEmail(email))
     }
 
 

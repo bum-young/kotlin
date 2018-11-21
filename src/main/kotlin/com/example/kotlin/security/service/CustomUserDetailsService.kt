@@ -12,21 +12,20 @@ import java.util.*
 import javax.transaction.Transactional
 
 @Service
-class CustomUserDetailsService : UserDetailsService {
-
-    @Autowired
-    var userRepository:UserRepository? = null
+class CustomUserDetailsService(
+  private val userRepository: UserRepository
+):UserDetailsService {
 
     @Transactional
     override fun loadUserByUsername(username: String?): UserDetails {
-        val user: User? = userRepository!!.findByUsernameOrEmail(username, username)
+        val user: User? = userRepository.findByUsernameOrEmail(username, username)
                 .orElseThrow{UsernameNotFoundException("User not found with username or email : $username")}
 
         return UserPrincipal.create(user)
     }
 
     fun loadUserById(id:Long): UserDetails {
-        val user:User? = userRepository?.findById(id)?.orElseThrow { UsernameNotFoundException("User not found with username or email : $id") }
+        val user:User? = userRepository.findById(id).orElseThrow { UsernameNotFoundException("User not found with username or email : $id") }
 
         return UserPrincipal.create(user)
     }

@@ -40,7 +40,7 @@ class AuthController(
 
     @PostMapping("/signin")
     fun authenticateUser(@Valid @RequestBody loginRequest:LoginRequest) : ResponseEntity<*> {
-        var authentication: Authentication = authenticationManager!!.authenticate(
+        var authentication: Authentication = authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(
                         loginRequest.usernameOrEmail,
                         loginRequest.password
@@ -49,30 +49,30 @@ class AuthController(
 
         SecurityContextHolder.getContext().authentication = authentication
 
-        var jwt:String = tokenProvider!!.generateToken(authentication)
+        var jwt:String = tokenProvider.generateToken(authentication)
 
         return ResponseEntity.ok(JwtAuthenticationResponse(jwt))
     }
 
     @PostMapping("/signup")
     fun registerUser(@Valid @RequestBody signUpRequest:SignUpRequest) : ResponseEntity<*>{
-        if(userRespository!!.existsByUsername(signUpRequest.username)){
+        if(userRespository.existsByUsername(signUpRequest.username)){
             return ResponseEntity(ApiResponse(false, "Username is already taken!")
                     , HttpStatus.BAD_REQUEST)
         }
-        if(userRespository!!.existsByEmail(signUpRequest.email)) {
+        if(userRespository.existsByEmail(signUpRequest.email)) {
             return ResponseEntity(ApiResponse(false,  "Email Address already in use!")
                     , HttpStatus.BAD_REQUEST)
         }
 
-        var user:User = User(signUpRequest.name, signUpRequest.username, signUpRequest.email,
-                            passwordEncoder?.encode(signUpRequest.password))
+        var user = User(signUpRequest.name, signUpRequest.username, signUpRequest.email,
+                            passwordEncoder.encode(signUpRequest.password))
 
-        var userRole: Role? = roleRepository!!.findByName(RoleName.ROLE_USER)
+        var userRole:Role? = roleRepository.findByName(RoleName.ROLE_USER)
 
         user.roles = Collections.singleton(userRole) as Set<Role>
 
-        var result:User = userRespository!!.save(user)
+        var result:User = userRespository.save(user)
 
         var location:URI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{username}")
                 .buildAndExpand(result.username).toUri()

@@ -34,14 +34,7 @@ class JwtTokenProvider {
     }
 
     fun getUserIdFormJWT(token:String?):Long {
-         /*var claims:Claims = Jwts.parser()
-                 .setSigningKey(jwtSecret)
-                 .parseClaimsJws(token)
-                 .body*/
-
-        //return claims.subject.toLong()
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).body.subject.toLong()
-
     }
 
     fun validateToken(authToken:String?):Boolean {
